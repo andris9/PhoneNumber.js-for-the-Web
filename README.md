@@ -2,6 +2,8 @@
 
 **PhoneNumber.js for the Web** is a fork of [PhoneNumber.js](https://github.com/andreasgal/PhoneNumber.js), a JavaScript library to parse phone numbers. PhoneNumber.js is meant to run mainly on FirefoxOS phones so browser compatibility is not a top priority for it. PhoneNumber.js for the Web tries to fix this by bringing this awesome library even to ancient browsers like Internet Explorer 6. See [Usage](#usage) for details.
 
+You can try it out with your browser [here](http://tahvel.info/PhoneNumber.js/examples/parse.html).
+
 ## PhoneNumber.js
 
 PhoneNumber.js is a JavaScript library to verify and format phone numbers.
