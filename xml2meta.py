@@ -114,13 +114,28 @@ if options.tests:
         print(example)
     sys.exit()
 
-print("const PHONE_NUMBER_META_DATA = {");
+print("var PHONE_NUMBER_META_DATA = {");
 for cc in map:
     entry = map[cc]
     if len(entry) > 1:
         output.append(cc + ": [" + ",".join(entry) + "]")
     else:
         output.append(cc + ": " + entry[0])
-for line in output:
-    print(line + ",")
+
+def lookahead(iterable):
+    it = iter(iterable)
+    last = it.next()
+    for val in it:
+        yield last, False
+        last = val
+    yield last, True
+
+# when generating the JSON file, do not add a trailing comma to the
+# last line of the output, otherwise IE will choke on it
+for line, last in lookahead(output):
+    if last:
+        print(line)
+    else:
+        print(line + ",")
+
 print("};")

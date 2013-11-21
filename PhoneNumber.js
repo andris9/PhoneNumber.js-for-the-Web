@@ -5,34 +5,34 @@ var PhoneNumber = (function (dataBase) {
   // Use strict in our context only - users might not want it
   'use strict';
 
-  const MAX_PHONE_NUMBER_LENGTH = 50;
-  const NON_ALPHA_CHARS = /[^a-zA-Z]/g;
-  const NON_DIALABLE_CHARS = /[^,#+\*\d]/g;
-  const NON_DIALABLE_CHARS_ONCE = new RegExp(NON_DIALABLE_CHARS.source);
-  const BACKSLASH = /\\/g;
-  const SPLIT_FIRST_GROUP = /^(\d+)(.*)$/;
-  const LEADING_PLUS_CHARS_PATTERN = /^[+\uFF0B]+/g;
+  var MAX_PHONE_NUMBER_LENGTH = 50,
+    NON_ALPHA_CHARS = /[^a-zA-Z]/g,
+    NON_DIALABLE_CHARS = /[^,#+\*\d]/g,
+    NON_DIALABLE_CHARS_ONCE = new RegExp(NON_DIALABLE_CHARS.source),
+    BACKSLASH = /\\/g,
+    SPLIT_FIRST_GROUP = /^(\d+)(.*)$/,
+    LEADING_PLUS_CHARS_PATTERN = /^[+\uFF0B]+/g,
 
-  // Format of the string encoded meta data. If the name contains "^" or "$"
-  // we will generate a regular expression from the value, with those special
-  // characters as prefix/suffix.
-  const META_DATA_ENCODING = ["region",
-                              "^(?:internationalPrefix)",
-                              "nationalPrefix",
-                              "^(?:nationalPrefixForParsing)",
-                              "nationalPrefixTransformRule",
-                              "nationalPrefixFormattingRule",
-                              "^possiblePattern$",
-                              "^nationalPattern$",
-                              "formats"];
+    // Format of the string encoded meta data. If the name contains "^" or "$"
+    // we will generate a regular expression from the value, with those special
+    // characters as prefix/suffix.
+    META_DATA_ENCODING = ["region",
+                            "^(?:internationalPrefix)",
+                            "nationalPrefix",
+                            "^(?:nationalPrefixForParsing)",
+                            "nationalPrefixTransformRule",
+                            "nationalPrefixFormattingRule",
+                            "^possiblePattern$",
+                            "^nationalPattern$",
+                            "formats"],
 
-  const FORMAT_ENCODING = ["^pattern$",
-                           "nationalFormat",
-                           "^leadingDigits",
-                           "nationalPrefixFormattingRule",
-                           "internationalFormat"];
+    FORMAT_ENCODING = ["^pattern$",
+                         "nationalFormat",
+                         "^leadingDigits",
+                         "nationalPrefixFormattingRule",
+                         "internationalFormat"],
 
-  var regionCache = Object.create(null);
+    regionCache = {};
 
   // Parse an array of strings into a convenient object. We store meta
   // data as arrays since thats much more compact than JSON.
@@ -69,7 +69,7 @@ var PhoneNumber = (function (dataBase) {
       return null;
     }
     // Bail if we already parsed the format definitions.
-    if (!(Array.isArray(formats[0])))
+    if (Object.prototype.toString.call(formats[0]) != "[object Array]")
       return;
     for (var n = 0; n < formats.length; ++n) {
       formats[n] = ParseArray(formats[n],
@@ -97,7 +97,7 @@ var PhoneNumber = (function (dataBase) {
       // identifiers with that country code. We skip entries that are
       // of type object, because they were already resolved (parsed into
       // an object), and their country code should have been in the cache.
-      if (Array.isArray(entry)) {
+      if (Object.prototype.toString.call(entry) == "[object Array]") {
         for (var n = 0; n < entry.length; n++) {
           if (typeof entry[n] == "string" && entry[n].substr(2,2) == region) {
             if (n > 0) {
@@ -106,8 +106,8 @@ var PhoneNumber = (function (dataBase) {
               // the formats field from the main country.
               if (typeof entry[0] == "string")
                 entry[0] = ParseMetaData(countryCode, entry[0]);
-              let formats = entry[0].formats;
-              let current = ParseMetaData(countryCode, entry[n]);
+              var formats = entry[0].formats;
+              var current = ParseMetaData(countryCode, entry[n]);
               current.formats = formats;
               return entry[n] = current;
             }
@@ -186,32 +186,9 @@ var PhoneNumber = (function (dataBase) {
     this.region = regionMetaData.region;
     this.regionMetaData = regionMetaData;
     this.nationalNumber = number;
-  }
-
-  // NationalNumber represents the result of parsing a phone number. We have
-  // three getters on the prototype that format the number in national and
-  // international format. Once called, the getters put a direct property
-  // onto the object, caching the result.
-  NationalNumber.prototype = {
-    // +1 949-726-2896
-    get internationalFormat() {
-      var value = FormatNumber(this.regionMetaData, this.nationalNumber, true);
-      Object.defineProperty(this, "internationalFormat", { value: value, enumerable: true });
-      return value;
-    },
-    // (949) 726-2896
-    get nationalFormat() {
-      var value = FormatNumber(this.regionMetaData, this.nationalNumber, false);
-      Object.defineProperty(this, "nationalFormat", { value: value, enumerable: true });
-      return value;
-    },
-    // +19497262896
-    get internationalNumber() {
-      var value = this.internationalFormat ? this.internationalFormat.replace(NON_DIALABLE_CHARS, "")
-                                           : null;
-      Object.defineProperty(this, "internationalNumber", { value: value, enumerable: true });
-      return value;
-    }
+    this.internationalFormat = FormatNumber(this.regionMetaData, this.nationalNumber, true);
+    this.nationalFormat = FormatNumber(this.regionMetaData, this.nationalNumber, false);
+    this.internationalNumber = this.internationalFormat ? this.internationalFormat.replace(NON_DIALABLE_CHARS, "") : null;
   };
 
   // Check whether the number is valid for the given region.
@@ -249,13 +226,13 @@ var PhoneNumber = (function (dataBase) {
     // Lookup the meta data for the region (or regions) and if the rest of
     // the number parses for that region, return the parsed number.
     var entry = dataBase[countryCode];
-    if (Array.isArray(entry)) {
+    if (Object.prototype.toString.call(entry) == "[object Array]") {
       for (var n = 0; n < entry.length; ++n) {
         if (typeof entry[n] == "string")
           entry[n] = ParseMetaData(countryCode, entry[n]);
         if (n > 0)
           entry[n].formats = entry[0].formats;
-        ret = ParseNationalNumber(number, entry[n])
+        ret = ParseNationalNumber(number, entry[n]);
         if (ret)
           return ret;
       }
@@ -282,16 +259,16 @@ var PhoneNumber = (function (dataBase) {
   // international dial prefixes and country codes.
   function ParseNumber(number, defaultRegion) {
     var ret;
-
+    
     // Remove formating characters and whitespace.
     number = PhoneNumberNormalizer.Normalize(number);
 
     // If there is no defaultRegion, we can't parse international access codes.
-    if (!defaultRegion && number[0] !== '+')
+    if (!defaultRegion && number.charAt(0) !== '+')
       return null;
 
     // Detect and strip leading '+'.
-    if (number[0] === '+')
+    if (number.charAt(0) === '+')
       return ParseInternationalNumber(number.replace(LEADING_PLUS_CHARS_PATTERN, ""));
 
     // Lookup the meta data for the given region.
@@ -302,7 +279,7 @@ var PhoneNumber = (function (dataBase) {
     // prefix and flag the number as international.
     if (md.internationalPrefix.test(number)) {
       var possibleNumber = number.replace(md.internationalPrefix, "");
-      ret = ParseInternationalNumber(possibleNumber)
+      ret = ParseInternationalNumber(possibleNumber);
       if (ret)
         return ret;
     }
@@ -314,7 +291,7 @@ var PhoneNumber = (function (dataBase) {
       // Some regions have specific national prefix parse rules. Apply those.
       var withoutPrefix = number.replace(md.nationalPrefixForParsing,
                                          md.nationalPrefixTransformRule || '');
-      ret = ParseNationalNumber(withoutPrefix, md)
+      ret = ParseNationalNumber(withoutPrefix, md);
       if (ret)
         return ret;
     } else {
@@ -326,13 +303,13 @@ var PhoneNumber = (function (dataBase) {
         return ret;
       }
     }
-    ret = ParseNationalNumber(number, md)
+    ret = ParseNationalNumber(number, md);
     if (ret)
       return ret;
 
     // Now lets see if maybe its an international number after all, but
     // without '+' or the international prefix.
-    ret = ParseInternationalNumber(number)
+    ret = ParseInternationalNumber(number);
     if (ret)
       return ret;
 
@@ -358,6 +335,6 @@ var PhoneNumber = (function (dataBase) {
 
   return {
     IsPlain: IsPlainPhoneNumber,
-    Parse: ParseNumber,
+    Parse: ParseNumber
   };
 })(PHONE_NUMBER_META_DATA);

@@ -1,11 +1,11 @@
-/* -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
-/* vim: set shiftwidth=2 tabstop=2 autoindent cindent expandtab: */
 
 var PhoneNumberNormalizer = (function() {
-  const UNICODE_DIGITS = /[\uFF10-\uFF19\u0660-\u0669\u06F0-\u06F9]/g;
-  const VALID_ALPHA_PATTERN = /[a-zA-Z]/g;
-  const LEADING_PLUS_CHARS_PATTERN = /^[+\uFF0B]+/g;
-  const NON_DIALABLE_CHARS = /[^,#+\*\d]/g;
+  "use strict";
+
+  var UNICODE_DIGITS = /[\uFF10-\uFF19\u0660-\u0669\u06F0-\u06F9]/g,
+    VALID_ALPHA_PATTERN = /[a-zA-Z]/g,
+    LEADING_PLUS_CHARS_PATTERN = /^[+\uFF0B]+/g,
+    NON_DIALABLE_CHARS = /[^,#+\*\d]/g;
 
   // Map letters to numbers according to the ITU E.161 standard
   var E161 = {
@@ -39,7 +39,7 @@ var PhoneNumberNormalizer = (function() {
     number = number.replace(LEADING_PLUS_CHARS_PATTERN, "+");
     number = number.replace(NON_DIALABLE_CHARS, "");
     return number;
-  };
+  }
 
 
   return {
