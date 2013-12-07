@@ -22,8 +22,8 @@ into PhoneNumber.js's internal format.
 
 ## Installation
 
-**PhoneNumber.js for the Web** requires [grunt-cli](http://gruntjs.com/) to be installed on your system for the buil step.
-If you do not have it yet, install it from npm:
+**PhoneNumber.js for the Web** requires [grunt-cli](http://gruntjs.com/) to be installed in your system.
+If you do not have it yet, install it from [npm](https://npmjs.org/package/grunt-cli):
 
     npm install -g grunt-cli
 
@@ -32,13 +32,13 @@ Install dependencies and run grunt:
     npm install
     grunt
 
-Additionally grunt has the following tasks that can be run:
+Additionally grunt has the following tasks:
 
-  * **grunt download** (default task) - downloads libphonenumber.xml and converts it to a JavaScript file
-  * **grunt clean** - removes the generated .js file
-  * **grunt test** - downloads libphonenumber.xml and prints converted JavaScript to console
+  * **grunt download** (default task) - downloads *PhoneNumberMetadata.xml* and stores it as a JavaScript file
+  * **grunt clean** - removes the generated *PhoneNumberMetadata.js* file
+  * **grunt test** - downloads *PhoneNumberMetadata.xml* and prints converted JavaScript to console
 
-If you want to update *PhoneNumberMetadata.js*, just run
+If you want to update *PhoneNumberMetadata.js*, just run:
 
     grunt
 
