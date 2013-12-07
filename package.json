@@ -1,0 +1,15 @@
+{
+  "name": "PhoneNumber.js-for-the-Web",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/andris9/PhoneNumber.js-for-the-Web.git"
+  },
+  "author": "Andris Reinman",
+  "license": "Apache 2.0",
+  "homepage": "https://github.com/andris9/PhoneNumber.js-for-the-Web",
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "libphonenumber-convert": "~0.1.0"
+  }
+}

@@ -22,8 +22,21 @@ into PhoneNumber.js's internal format.
 
 ## Installation
 
-Run `make` in the root folder of this project to download and parse phone number information from the
-[libphonenumber](http://libphonenumber.googlecode.com/) project (*libphonenumber* is licensed under Apache License 2.0). This will generate a new file called *PhoneNumberMetadata.js* that contains all the nessecary data for parsing phone numbers.
+**PhoneNumber.js for the Web** requires [grunt-cli](http://gruntjs.com/) to be installed on your system.
+If you do not have it yet, install it from npm:
+
+    npm install -g grunt-cli
+
+Install build dependencies and run grunt:
+
+    npm install
+    grunt
+
+Grunt has the following actions that can be run
+
+  * **grunt download** (default task) - downloads libphonenumber.xml and converts it to a JavaScript file
+  * **grunt clean** - removes the generated .js file
+  * **grunt test** - downloads libphonenumber.xml and prints converted JavaScript to console
 
 ## Usage
 
