@@ -38,6 +38,10 @@ Additionally grunt has the following tasks that can be run:
   * **grunt clean** - removes the generated .js file
   * **grunt test** - downloads libphonenumber.xml and prints converted JavaScript to console
 
+If you want to update *PhoneNumberMetadata.js*, just run
+
+    grunt
+
 ## Usage
 
 Include the following files in your project
