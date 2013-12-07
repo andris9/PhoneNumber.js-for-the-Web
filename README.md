@@ -22,17 +22,17 @@ into PhoneNumber.js's internal format.
 
 ## Installation
 
-**PhoneNumber.js for the Web** requires [grunt-cli](http://gruntjs.com/) to be installed on your system.
+**PhoneNumber.js for the Web** requires [grunt-cli](http://gruntjs.com/) to be installed on your system for the buil step.
 If you do not have it yet, install it from npm:
 
     npm install -g grunt-cli
 
-Install build dependencies and run grunt:
+Install dependencies and run grunt:
 
     npm install
     grunt
 
-Grunt has the following actions that can be run
+Additionally grunt has the following tasks that can be run:
 
   * **grunt download** (default task) - downloads libphonenumber.xml and converts it to a JavaScript file
   * **grunt clean** - removes the generated .js file
