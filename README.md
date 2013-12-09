@@ -17,7 +17,7 @@ memory use should be below 200k. If you mostly format numbers from one or a few
 regions, memory use should be pretty close to 60k.
 
 PhoneNumber.js uses libphonenumber's PhoneNumberMetadata.xml database of known
-phone number formats. Use "make" to download the xml file and translate it
+phone number formats. Use "grunt" to download the xml file and translate it
 into PhoneNumber.js's internal format.
 
 ## Installation
